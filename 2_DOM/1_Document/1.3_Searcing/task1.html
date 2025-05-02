@@ -1,0 +1,31 @@
+<form action="/search" method="get" name="searchForm">
+    <div class="site-section">
+      <label class="site-label">Search the site:</label><br>
+      <input type="text" name="siteQueryInput" placeholder="Search the site">
+      <button type="submit">Search</button>
+    </div>
+  
+    <table id="age-table">
+      <tr>
+        <td>Age:</td>
+        <td>
+          <label class="age-option">
+            <input type="radio" name="visitorAge" value="young"> less than 18
+          </label>
+          <label class="age-option">
+            <input type="radio" name="visitorAge" value="adult"> 18-50
+          </label>
+          <label class="age-option">
+            <input type="radio" name="visitorAge" value="senior"> more than 50
+          </label>
+        </td>
+      </tr>
+    </table>
+  
+    <div class="extra-info">
+      <label for="details">Additionally:</label><br>
+      <textarea name="visitorNotes" rows="3" cols="40" placeholder="Add more details..."></textarea>
+      <button type="submit">Enter</button>
+    </div>
+  </form>
+  
