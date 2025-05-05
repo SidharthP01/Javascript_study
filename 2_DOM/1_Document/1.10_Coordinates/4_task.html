@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    .note {
+      position: absolute;
+      padding: 5px;
+      background: yellow;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body style="height:2000px">
+
+  <blockquote>Late? I stood on a $100 bill.</blockquote>
+
+  <script>
+    function getCoords(el) {
+      const r = el.getBoundingClientRect();
+      return { top: r.top + scrollY, left: r.left + scrollX };
+    }
+
+    function showNote(anchor, pos, text) {
+      const note = document.createElement('div');
+      note.className = "note";
+      note.innerHTML = text;
+      document.body.append(note);
+      positionAt(anchor, pos, note);
+    }
+
+    function positionAt(anchor, pos, el) {
+      const c = getCoords(anchor);
+      if (pos === "top-in")      {
+         el.style.left = c.left + "px"; el.style.top = c.top + "px"; }
+
+      if (pos === "top-out")     { 
+        el.style.left = c.left + "px"; el.style.top = c.top - el.offsetHeight + "px"; }
+
+      if (pos === "right-out")   { 
+        el.style.left = c.left + anchor.offsetWidth + "px"; el.style.top = c.top + "px"; }
+
+      if (pos === "bottom-in")   { 
+        el.style.left = c.left + "px"; el.style.top = c.top + anchor.offsetHeight - el.offsetHeight + "px"; }
+        
+      if (pos === "right-in")    {
+        el.style.width = "150px";
+        el.style.left = c.left + anchor.offsetWidth - el.offsetWidth + "px";
+        el.style.top = c.top + "px";
+      }
+    }
+
+    const bq = document.querySelector("blockquote");
+    showNote(bq, "top-in", "top-in");
+    showNote(bq, "top-out", "top-out");
+    showNote(bq, "right-out", "right-out");
+    showNote(bq, "bottom-in", "bottom-in");
+  </script>
+
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    .note {
+      position: absolute;
+      padding: 5px;
+      background: yellow;
+      border: 1px solid #ccc;
+    }
+  </style>
+</head>
+<body style="height:2000px">
+
+  <blockquote>Why are you late? I was standing on a $100 bill.</blockquote>
+
+  <script>
+    function getCoords(el) {
+      let box = el.getBoundingClientRect();
+      return {
+        top: box.top + window.pageYOffset,
+        left: box.left + window.pageXOffset
+      };
+    }
+
+    function positionAt(anchor, position, elem) {
+      let c = getCoords(anchor);
+      if (position === "top") {
+        elem.style.left = c.left + "px";
+        elem.style.top = c.top - elem.offsetHeight + "px";
+      }
+      if (position === "right") {
+        elem.style.left = c.left + anchor.offsetWidth + "px";
+        elem.style.top = c.top + "px";
+      }
+      if (position === "bottom") {
+        elem.style.left = c.left + "px";
+        elem.style.top = c.top + anchor.offsetHeight + "px";
+      }
+    }
+
+    function showNote(anchor, pos, text) {
+      let note = document.createElement("div");
+      note.className = "note";
+      note.innerHTML = text;
+      document.body.append(note);
+      positionAt(anchor, pos, note);
+    }
+
+    let bq = document.querySelector("blockquote");
+    showNote(bq, "top", "Above");
+    showNote(bq, "right", "Right");
+    showNote(bq, "bottom", "Below");
+  </script>
+
+</body>
+</html>
