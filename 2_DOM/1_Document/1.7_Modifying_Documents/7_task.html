@@ -1,0 +1,49 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+  <style>
+    table {
+      border-collapse: collapse;
+    }
+    td, th {
+      border: 1px solid black;
+      padding: 3px;
+      text-align: center;
+    }
+    th {
+      background-color: #E6E6E6;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+
+<div id="calendar"></div>
+
+<script>
+  function createCalendar(elem, year, month) {
+    let d = new Date(year, month - 1);
+    let table = `<table>
+      <tr><th>MO</th><th>TU</th><th>WE</th><th>TH</th><th>FR</th><th>SA</th><th>SU</th></tr><tr>`;
+
+    let start = (d.getDay() + 6) % 7; // convert Sunday=0 to Sunday=6
+    table += "<td>".repeat(start);
+
+    while (d.getMonth() === month - 1) {
+      table += `<td>${d.getDate()}</td>`;
+      if ((d.getDay() + 6) % 7 === 6) table += "</tr><tr>";
+      d.setDate(d.getDate() + 1);
+    }
+
+    let end = (d.getDay() + 6) % 7;
+    if (end !== 0) table += "<td></td>".repeat(7 - end);
+
+    table += "</tr></table>";
+    elem.innerHTML = table;
+  }
+
+  createCalendar(document.getElementById('calendar'), 2012, 9);
+</script>
+
+</body>
+</html>
