@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <style>
+    table {
+      border-collapse: collapse;
+      width: 80%;
+    }
+    td {
+      border: 1px solid #ccc;
+      padding: 10px;
+      position: relative;
+    }
+    .edit-td {
+      padding: 0;
+    }
+    .edit-area {
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      resize: none;
+      border: none;
+      font: inherit;
+      padding: 10px;
+    }
+    .edit-controls {
+      display: flex;
+      justify-content: flex-end;
+      gap: 5px;
+      margin-top: 5px;
+    }
+    .edit-controls button {
+      font-size: 12px;
+      padding: 2px 6px;
+    }
+  </style>
+</head>
+<body>
+
+  <p>Click a cell to edit:</p>
+
+  <table id="editable-table">
+    <tr><td>Hello</td><td>World</td></tr>
+    <tr><td>Click</td><td>Here</td></tr>
+    <tr><td>Editable</td><td>Cells</td></tr>
+  </table>
+
+  <script>
+    const table = document.getElementById('editable-table');
+    let editingCell = null;
+
+    table.addEventListener('click', function(event) {
+      const btn = event.target.closest('button');
+      if (btn && table.contains(btn)) {
+        if (!editingCell) return;
+
+        if (btn.classList.contains('edit-ok')) {
+          finishEdit(true);
+        } else if (btn.classList.contains('edit-cancel')) {
+          finishEdit(false);
+        }
+        return;
+      }
+
+      const td = event.target.closest('td');
+      if (!td || editingCell) return;
+
+      startEdit(td);
+    });
+
+    function startEdit(td) {
+      editingCell = {
+        td: td,
+        originalHTML: td.innerHTML
+      };
+
+      const rect = td.getBoundingClientRect();
+      const width = td.clientWidth;
+      const height = td.clientHeight;
+
+      const textArea = document.createElement('textarea');
+      textArea.className = 'edit-area';
+      textArea.value = td.innerHTML;
+      textArea.style.width = width + 'px';
+      textArea.style.height = height + 'px';
+
+      td.classList.add('edit-td');
+      td.innerHTML = '';
+      td.appendChild(textArea);
+
+      const controls = document.createElement('div');
+      controls.className = 'edit-controls';
+      controls.innerHTML = `
+        <button class="edit-ok">OK</button>
+        <button class="edit-cancel">CANCEL</button>
+      `;
+      td.appendChild(controls);
+
+      textArea.focus();
+    }
+
+    function finishEdit(save) {
+      if (!editingCell) return;
+      const { td, originalHTML } = editingCell;
+      const textarea = td.querySelector('textarea');
+      td.innerHTML = save ? textarea.value : originalHTML;
+      td.classList.remove('edit-td');
+      editingCell = null;
+    }
+  </script>
+
+</body>
+</html>
