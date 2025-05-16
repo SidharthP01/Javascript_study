@@ -59,23 +59,38 @@
   <audio data-key="76" src="sounds/tink.wav"></audio>
 
 <script>
-  function removeTransition(e){
-    if(e.propertyName !== 'transform') return;
-    this.classList.remove('playing');
-  }
+  function removeTransition(e) {
+  if (e.propertyName !== 'transform') return;
+  console.log(e);
+  this.classList.remove('playing');
+}
 
-  function playDrums(e){
-    const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
-    const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
-    if (!audio) return;
-    key.classList.add('playing');
-    audio.currentTime = 0;
-    audio.play();
-  }
- 
-  const keys = Array.from(document.querySelectorAll('.key'));
-  keys.forEach(key => key.addEventListener('transitionend', removeTransition));
-  window.addEventListener('keydown', playDrums);
+function playDrums(e) {
+  const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+  const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+  if (!audio || !key) return;
+
+  key.classList.add('playing');
+  audio.currentTime = 0; // Rewind to the start
+  audio.play();
+}
+// function playDrums(e) {
+//   const audio = document.querySelector(`audio[data-key="${e.keyCode}"]`);
+//   const key = document.querySelector(`.key[data-key="${e.keyCode}"]`);
+//   if (!audio || !key) return;
+
+//   key.classList.remove('playing'); // 🔥 Remove first to reset transition
+//   void key.offsetWidth;            // 🔧 Trigger a reflow
+//   key.classList.add('playing');    // ✅ Re-add to start transition again
+
+//   audio.currentTime = 0;
+//   audio.play();
+// }
+
+const keys = Array.from(document.querySelectorAll(`.key`));
+keys.forEach(key => key.addEventListener('transitionend', removeTransition));
+window.addEventListener('keydown', playDrums);
+
 </script>
 
 
